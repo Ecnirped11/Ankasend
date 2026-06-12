@@ -20,10 +20,10 @@ class SMSSenderBot:
     def reply_message(self, update: Update, message: str) -> None:
         return update.message.reply_text(message, parse_mode=ParseMode.HTML)
 
-    async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPES) -> None:
+    async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await self.reply_message(update, f'welcome @{update.effective_user.username}')
 
-    async def sms_contents(self, update: Update, context: ContextTypes.DEFAULT_TYPES) -> None:
+    async def sms_contents(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         content = update.message.text
 
         sms_details = SMSDetails(content)
