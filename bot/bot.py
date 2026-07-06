@@ -35,8 +35,10 @@ class SMSSenderBot:
             anka_sender_engine = AnkarexSender(details_response)
             print(details_response)
             response_data =  anka_sender_engine.send_sms() 
-            print(response_data)
-            await self.reply_message(update, 
+            print('response: ', response_data)
+
+            if response_data['info'] == 'QUEUED':
+                await self.reply_message(update, 
             f"""
 <b>SMS Accepted</b>
 
@@ -46,7 +48,9 @@ class SMSSenderBot:
 <b>Cost</b>: ${response_data['estimated_cost']}
 <b>Balance</b>: ${response_data['balance']}
             """
-            )
+                )
+            else:
+                await self.reply_message(update, f'<b>Error occur:</b> {response_data['info']}')
 
     def run_bot(self) -> None:
         print('Start start')

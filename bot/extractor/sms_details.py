@@ -10,6 +10,7 @@ class SMSDetails:
             re.DOTALL | re.IGNORECASE
         )
         self.sid = ''
+        self.sms_details_response = ''
 
     def text_match(self) -> bool:
         return  self.pattern.search(self.text)
@@ -17,8 +18,14 @@ class SMSDetails:
     def crop_out_content(self) -> str:
         match = self.text_match()
         if match:
+            initial_phone_numbers = match.group('phone').strip()
+            phones = re.findall(r"\+?\d[\d\s().-]*\d", initial_phone_numbers)
+            phone = " ".join(
+                re.sub(r"(?<!^)\+|[^\d+]", "", p)
+                for p in phones
+            )
             extracted_content = {
-                'phone_number': match.group('phone').strip(),
+                'phone_number': phone,
                 "message" : match.group("message").strip(),
                 "sid": match.group('sid').strip()
             }
@@ -57,8 +64,11 @@ class SMSDetails:
                 
             except ValueError:
                 return "Error: Caption contains non-numeric values."
+
         else:
             return 'Not Found'
+        
+        
         
             
            
